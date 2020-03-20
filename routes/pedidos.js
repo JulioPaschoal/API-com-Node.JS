@@ -3,20 +3,59 @@ const router = express.Router();
 
 //RETORNA TODOS OS PEDIDOS
 router.get('/', (req, res, next) => {
-    res.status(200).send({
-        mensagem: 'Retorna os pedidos'
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            'SELECT * FROM pedidos;',
+            (error, result, fields) => {
+                if (error) { return res.status(500).send({ error: error }) }
+                const response = {
+                    quantidade: result.length,
+                    pedidos: result.map(pedido => {
+                        return{
+                            id_pedido:  pedido.id_pedido,
+                            id_produto: pedido.id_produto,
+                            quantidade: pedido.quantidade,
+                            request: {
+                                tipo: 'GET',
+                                descricao: 'Retorna todos os detalhes de um pedido especifico',
+                                url: 'http://localhost:3000/pedidos/' + pedido.id_pedido
+                            }
+                        }
+                    })
+                }
+                return res.status(200).send({ response })
+            }
+        )
     });
 });
 
 //INSERE UM PEDIDOS
 router.post('/', (req, res, next) => {
-    const pedido = {
-        id_produto: req.body.id_produto,
-        quantidade: req.body.quantidade
-    }
-    res.status(201).send({
-        mensagem: 'O pedido foi criado ',
-        pedidoCriado: pedido
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            'SELECT * FROM pedidos;',
+            (error, result, fields) => {
+                if (error) { return res.status(500).send({ error: error }) }
+                const response = {
+                    quantidade: result.length,
+                    pedidos: result.map(pedido => {
+                        return{
+                            id_pedido:  pedido.id_pedido,
+                            id_produto: pedido.id_produto,
+                            quantidade: pedido.quantidade,
+                            request: {
+                                tipo: 'GET',
+                                descricao: 'Retorna todos os detalhes de um pedido especifico',
+                                url: 'http://localhost:3000/pedidos/' + pedido.id_pedido
+                            }
+                        }
+                    })
+                }
+                return res.status(200).send({ response })
+            }
+        )
     });
 });
 
