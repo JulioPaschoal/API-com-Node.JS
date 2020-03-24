@@ -5,8 +5,10 @@ const bodyParser = require('body-parser');
 
 const rotaProdutos = require('./routes/produtos');
 const rotaPedidos = require('./routes/pedidos');
+const rotaUsuarios = require('./routes/usuarios');
 
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false })); //APENAS DADOS SIMPLES
 app.use(bodyParser.json()); //JSON DE ENTRADA NO BODY
 
@@ -24,6 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/produtos', rotaProdutos);
 app.use('/pedidos', rotaPedidos);
+app.use('/usuarios',rotaUsuarios);
 
 //QUANDO NAO ENCONTRAR NENHUMA ROTA 
 app.use((req, res, next) => {
